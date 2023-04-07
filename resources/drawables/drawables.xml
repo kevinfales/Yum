@@ -1,0 +1,27 @@
+<drawables>
+    <bitmap id="LauncherIcon" filename="launcher_icon.png" />
+    <bitmap id="mockup" filename="mockup 12.png" />
+
+    <bitmap id="battery_5" filename="battery_5.png" />
+    <bitmap id="battery_15" filename="battery_15.png" />
+    <bitmap id="battery_25" filename="battery_25.png" />
+    <bitmap id="battery_35" filename="battery_35.png" />
+    <bitmap id="battery_45" filename="battery_45.png" />
+    <bitmap id="battery_55" filename="battery_55.png" />
+    <bitmap id="battery_65" filename="battery_65.png" />
+    <bitmap id="battery_75" filename="battery_75.png" />
+    <bitmap id="battery_85" filename="battery_85.png" />
+    <bitmap id="battery_95" filename="battery_95.png" />
+
+    <bitmap id="hr_low" filename="hr_low.png" />
+    <bitmap id="hr_elevated" filename="hr_elevated.png" />
+    <bitmap id="hr_high" filename="hr_high.png" />
+    <bitmap id="hr_max" filename="hr_max.png" />
+
+    <bitmap id="steps_incomplete" filename="steps_incomplete.png" />
+    <bitmap id="steps_complete" filename="steps_complete.png" />
+
+    <bitmap id="distance" filename="distance.png" />
+    <bitmap id="floors" filename="floors.png" />
+    <bitmap id="hourPattern" filename="hour_pattern.png" />
+</drawables>

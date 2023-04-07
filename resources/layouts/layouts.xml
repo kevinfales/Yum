@@ -1,0 +1,6 @@
+<layouts>
+    <layout id="Main">
+        <!-- <label id="steps" x="center" y="90" font="@Fonts.RAJ_SMALL" color="0x00E39F" justification="Gfx.TEXT_JUSTIFY_CENTER" /> -->
+        <label id="steps" text="Page Heading" x="10" y="25" font="Gfx.FONT_LARGE" color="Gfx.COLOR_WHITE" />
+    </layout>
+</layouts>
