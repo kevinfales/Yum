@@ -117,7 +117,7 @@ class YumView extends Ui.WatchFace {
         drawStats(dc);
 
         // Mockup time
-        //dc.drawBitmap(0,0, mockup);
+        // dc.drawBitmap(0,0, mockup);
 
     }
 
@@ -156,8 +156,8 @@ class YumView extends Ui.WatchFace {
             }
             
             dc.drawBitmap(
-                (dc.getWidth() / 2)-40, 
-                30,
+                (dc.getWidth() / 2)-42, 
+                28,
                 batteryIcon[batteryIconIndex]
             );
             dc.drawText(
@@ -221,7 +221,7 @@ class YumView extends Ui.WatchFace {
         if(!inLowPower) {
             dc.drawText(
                 secondsPosX,
-                194, 
+                187, 
                 FONT_RAJ_SMALL, 
                 time.sec.format("%02d"), 
                 Gfx.TEXT_JUSTIFY_LEFT
@@ -234,7 +234,7 @@ class YumView extends Ui.WatchFace {
         if(!inLowPower) {
             dc.drawText(
                 dc.getWidth() / 2,
-                100, 
+                98, 
                 FONT_RAJ_SMALL, 
                 dateString.toUpper(), 
                 Gfx.TEXT_JUSTIFY_CENTER
@@ -247,22 +247,22 @@ class YumView extends Ui.WatchFace {
         if(!inLowPower) {
             // Steps
             dc.drawBitmap(
-                136, 
+                134, 
                 303,
                 (steps < stepGoal) ? stepsIcon[0] : stepsIcon[1]
             );
             dc.drawText(
-                151, 
-                334,
+                153, 
+                339,
                 FONT_RAJ_SMALL, 
                 steps, 
                 Gfx.TEXT_JUSTIFY_CENTER
             );
 
             // Ring
-            var ringRadius = 47;
-            var ringX = 150;
-            var ringY = 335;
+            var ringRadius = 52;
+            var ringX = 152;
+            var ringY = 340;
             var top = 90;
             var stepPercent = (steps.toFloat() / stepGoal.toFloat()) as Lang.Float;
             var angle = top+(360-(stepPercent*360));
@@ -294,8 +294,8 @@ class YumView extends Ui.WatchFace {
     function drawStats(dc) {
         /** Stats **/
         if(!inLowPower) {
-            var iconLeftPos = (dc.getWidth() / 2) + 14;
-            var textLeftPos = (dc.getWidth() / 2) + 48;
+            var iconLeftPos = 221;
+            var textLeftPos = iconLeftPos + 42;
             var hrTextColor = COLOR_LIGHTGREY;
 
             // Heart rate
@@ -318,12 +318,12 @@ class YumView extends Ui.WatchFace {
             dc.setColor(hrTextColor, Gfx.COLOR_BLACK);
             dc.drawBitmap(
                 iconLeftPos, 
-                287,
+                282,
                 hrIcon[hrIconIndex]
             );
             dc.drawText(
                 textLeftPos, 
-                284, 
+                279, 
                 FONT_RAJ_SMALL, 
                 (heartRate == 0) ? "-" : heartRate, 
                 Gfx.TEXT_JUSTIFY_LEFT
@@ -333,12 +333,12 @@ class YumView extends Ui.WatchFace {
             // Distance
             dc.drawBitmap(
                 iconLeftPos, 
-                323,
+                322,
                 distanceIcon
             );
             dc.drawText(
                 textLeftPos, 
-                320, 
+                319, 
                 FONT_RAJ_SMALL, 
                 distance+"km", 
                 Gfx.TEXT_JUSTIFY_LEFT
@@ -347,12 +347,12 @@ class YumView extends Ui.WatchFace {
             // Floors
             dc.drawBitmap(
                 iconLeftPos, 
-                359,
+                362,
                 floorsIcon
             );
             dc.drawText(
                 textLeftPos, 
-                356, 
+                359, 
                 FONT_RAJ_SMALL, 
                 floorsClimbed, 
                 Gfx.TEXT_JUSTIFY_LEFT

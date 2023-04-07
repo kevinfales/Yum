@@ -1,6 +1,6 @@
 <drawables>
     <bitmap id="LauncherIcon" filename="launcher_icon.png" />
-    <bitmap id="mockup" filename="mockup 12.png" />
+    <bitmap id="mockup" filename="mockup 15.png" />
 
     <bitmap id="battery_5" filename="battery_5.png" />
     <bitmap id="battery_15" filename="battery_15.png" />
