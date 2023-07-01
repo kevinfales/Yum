@@ -28,6 +28,7 @@ class YumView extends Ui.WatchFace {
 
     //Fonts
     hidden var FONT_RAJ_BIG;
+    hidden var FONT_RAJ_BIG_OUTLINE;
     hidden var FONT_RAJ_SMALL;
 
     //Colors
@@ -37,25 +38,34 @@ class YumView extends Ui.WatchFace {
     hidden var COLOR_YELLOW = 0xE0D785;
     hidden var COLOR_ORANGE = 0xE79356;
     hidden var COLOR_AMBER = 0xFF6C2E;
+    hidden var COLOR_RED = 0xD80D00;
+    hidden var COLOR_DARKRED = 0x770700;
 
     // Bitmaps
     hidden var hourPattern;
+    hidden var hourPatternRed;
     hidden var batteryIcon;
+    hidden var batteryIconNightmode;
     hidden var batteryIconIndex = 0;
     hidden var hrIcon;
-    hidden var hrIconIndex = 0;
+    hidden var hrIconNightmode;
     hidden var stepsIcon;
+    hidden var stepsIconNightmode;
     hidden var distanceIcon;
+    hidden var distanceIconNightmode;
     hidden var floorsIcon;
+    hidden var floorsIconNightmode;
 
     hidden var mockup;
 
     function initialize() {
         Ui.WatchFace.initialize();
         FONT_RAJ_BIG = App.loadResource(Rez.Fonts.RAJ_BIG);
+        FONT_RAJ_BIG_OUTLINE = App.loadResource(Rez.Fonts.RAJ_BIG_OUTLINE);
         FONT_RAJ_SMALL = App.loadResource(Rez.Fonts.RAJ_SMALL);
-        mockup = App.loadResource(Rez.Drawables.mockup);
+        // mockup = App.loadResource(Rez.Drawables.mockup);
         hourPattern = App.loadResource(Rez.Drawables.hourPattern);
+        hourPatternRed = App.loadResource(Rez.Drawables.hourPatternRed);
         batteryIcon = [
             App.loadResource(Rez.Drawables.battery_5),
             App.loadResource(Rez.Drawables.battery_15),
@@ -68,18 +78,34 @@ class YumView extends Ui.WatchFace {
             App.loadResource(Rez.Drawables.battery_85),
             App.loadResource(Rez.Drawables.battery_95)
         ];
+        batteryIconNightmode = [
+            App.loadResource(Rez.Drawables.battery_5_nightmode),
+            App.loadResource(Rez.Drawables.battery_15_nightmode),
+            App.loadResource(Rez.Drawables.battery_25_nightmode),
+            App.loadResource(Rez.Drawables.battery_35_nightmode),
+            App.loadResource(Rez.Drawables.battery_45_nightmode),
+            App.loadResource(Rez.Drawables.battery_55_nightmode),
+            App.loadResource(Rez.Drawables.battery_65_nightmode),
+            App.loadResource(Rez.Drawables.battery_75_nightmode),
+            App.loadResource(Rez.Drawables.battery_85_nightmode),
+            App.loadResource(Rez.Drawables.battery_95_nightmode)
+        ];
         hrIcon = [
             App.loadResource(Rez.Drawables.hr_low),
             App.loadResource(Rez.Drawables.hr_elevated),
             App.loadResource(Rez.Drawables.hr_high),
             App.loadResource(Rez.Drawables.hr_max),
         ];
+        hrIconNightmode = App.loadResource(Rez.Drawables.hr_nightmode);
         stepsIcon = [
             App.loadResource(Rez.Drawables.steps_incomplete),
             App.loadResource(Rez.Drawables.steps_complete),
         ];
+        stepsIconNightmode = App.loadResource(Rez.Drawables.steps_nightmode);
         distanceIcon = App.loadResource(Rez.Drawables.distance);
+        distanceIconNightmode = App.loadResource(Rez.Drawables.distance_nightmode);
         floorsIcon = App.loadResource(Rez.Drawables.floors);
+        floorsIconNightmode = App.loadResource(Rez.Drawables.floors_nightmode);
         updateData();
     }
 
@@ -106,8 +132,8 @@ class YumView extends Ui.WatchFace {
 
     function onUpdate(dc) {
         updateData();
-
-        dc.setColor(COLOR_LIGHTGREY, Gfx.COLOR_BLACK);
+        var color = isNightMode() ? COLOR_RED : COLOR_LIGHTGREY;
+        dc.setColor(color, Gfx.COLOR_BLACK);
         dc.clear();
 
         drawBattery(dc);
@@ -119,6 +145,11 @@ class YumView extends Ui.WatchFace {
         // Mockup time
         // dc.drawBitmap(0,0, mockup);
 
+    }
+
+    function isNightMode() {
+        // Night mode is between 11pm - 8am
+        return (time.hour <= 7 || time.hour >= 23);
     }
 
     function drawBattery(dc) {
@@ -155,10 +186,11 @@ class YumView extends Ui.WatchFace {
                 batteryIconIndex = 0;
             }
             
+            var icon = isNightMode() ? batteryIconNightmode : batteryIcon;
             dc.drawBitmap(
                 (dc.getWidth() / 2)-42, 
                 28,
-                batteryIcon[batteryIconIndex]
+                icon[batteryIconIndex]
             );
             dc.drawText(
                 dc.getWidth() / 2, 
@@ -189,14 +221,18 @@ class YumView extends Ui.WatchFace {
         var hourPosX = (dc.getWidth() / 2) - (timeWidthInPx / 2);
         var secondsPosX = (dc.getWidth() / 2) + (timeWidthInPx / 2) + 4;
         
+        var pattern = isNightMode() ? hourPatternRed : hourPattern;
+
         // Hour
         
         dc.drawBitmap(
             hourPosX, 
             136,
-            hourPattern
+            pattern
         );
+        
         dc.setColor(Gfx.COLOR_TRANSPARENT, Gfx.COLOR_BLACK);
+
         dc.drawText(
             hourPosX,
             109,
@@ -207,15 +243,19 @@ class YumView extends Ui.WatchFace {
         
 
         // Minute
-        dc.setColor(COLOR_TEAL, Gfx.COLOR_BLACK);
+        var font = isNightMode() ? FONT_RAJ_BIG_OUTLINE : FONT_RAJ_BIG;
+        var color = isNightMode() ? COLOR_RED : COLOR_TEAL;
+        dc.setColor(color, Gfx.COLOR_BLACK);
+
         dc.drawText(
             hourPosX + hourWidthInPx,
             109, 
-            FONT_RAJ_BIG, 
+            font, 
             time.min.format("%02d"), 
             Gfx.TEXT_JUSTIFY_LEFT
         );
-        dc.setColor(COLOR_LIGHTGREY, Gfx.COLOR_BLACK);
+        color = isNightMode() ? COLOR_RED : COLOR_LIGHTGREY;
+        dc.setColor(color, Gfx.COLOR_BLACK);
 
         // Second
         if(!inLowPower) {
@@ -245,11 +285,21 @@ class YumView extends Ui.WatchFace {
     function drawSteps(dc) {
         /** Steps ring **/
         if(!inLowPower) {
+            var icon;
+            if(isNightMode()) {
+                icon = stepsIconNightmode;
+            }
+            else if(steps >= stepGoal) {
+                icon = stepsIcon[1];
+            }
+            else {
+                icon = stepsIcon[0];
+            }
             // Steps
             dc.drawBitmap(
                 134, 
                 303,
-                (steps < stepGoal) ? stepsIcon[0] : stepsIcon[1]
+                icon
             );
             dc.drawText(
                 153, 
@@ -260,6 +310,7 @@ class YumView extends Ui.WatchFace {
             );
 
             // Ring
+            var ringColor = COLOR_LIGHTGREY;
             var ringRadius = 52;
             var ringX = 152;
             var ringY = 340;
@@ -277,11 +328,13 @@ class YumView extends Ui.WatchFace {
                 var x = ringX + ringRadius * Math.cos(Math.toRadians(-angle));
                 var y = ringY + ringRadius * Math.sin(Math.toRadians(-angle));
                 if(steps > stepGoal) {
-                    dc.setColor(COLOR_TEAL, Gfx.COLOR_BLACK);
+                    ringColor = isNightMode() ? COLOR_RED : COLOR_TEAL;
+                    dc.setColor(ringColor, Gfx.COLOR_BLACK);
                     dc.drawArc(ringX, ringY, ringRadius, Gfx.ARC_CLOCKWISE , 0, 360);
                 }
                 else {
-                    dc.setColor(COLOR_LIGHTGREY, Gfx.COLOR_BLACK);
+                    ringColor = isNightMode() ? COLOR_DARKRED : COLOR_LIGHTGREY;
+                    dc.setColor(ringColor, Gfx.COLOR_BLACK);
                     dc.fillCircle(ringX, ringY-ringRadius, 3);
                     dc.drawArc(ringX, ringY, ringRadius, Gfx.ARC_CLOCKWISE, top, angle);
                     dc.fillCircle(x, y, 3);
@@ -297,44 +350,49 @@ class YumView extends Ui.WatchFace {
             var iconLeftPos = 221;
             var textLeftPos = iconLeftPos + 42;
             var hrTextColor = COLOR_LIGHTGREY;
-
+            var icon = {
+                :hr => isNightMode() ? hrIconNightmode : hrIcon[0],
+                :distance => isNightMode() ? distanceIconNightmode : distanceIcon,
+                :floors => isNightMode() ? floorsIconNightmode : floorsIcon
+            };
             // Heart rate
-            hrIconIndex = 0;
-            if(heartRate == null) {
-                heartRate = 0;
+            var hrLabel = heartRate == null ? 0 : heartRate;
+            if(!isNightMode()) {
+                if(hrLabel > 140) {
+                    icon[:hr] = hrIcon[3];
+                    hrTextColor = COLOR_AMBER;
+                }
+                else if(hrLabel > 110) {
+                    icon[:hr] = hrIcon[2];
+                    hrTextColor = COLOR_ORANGE;
+                }
+                else if(hrLabel > 85) {
+                    icon[:hr] = hrIcon[1];
+                    hrTextColor = COLOR_YELLOW;
+                }
             }
-            if(heartRate > 140) {
-                hrIconIndex = 3;
-                hrTextColor = COLOR_AMBER;
-            }
-            else if(heartRate > 110) {
-                hrIconIndex = 2;
-                hrTextColor = COLOR_ORANGE;
-            }
-            else if(heartRate > 85) {
-                hrIconIndex = 1;
-                hrTextColor = COLOR_YELLOW;
-            }
+            hrTextColor = isNightMode() ? COLOR_RED : hrTextColor;
             dc.setColor(hrTextColor, Gfx.COLOR_BLACK);
             dc.drawBitmap(
                 iconLeftPos, 
                 282,
-                hrIcon[hrIconIndex]
+                icon[:hr]
             );
             dc.drawText(
                 textLeftPos, 
                 279, 
                 FONT_RAJ_SMALL, 
-                (heartRate == 0) ? "-" : heartRate, 
+                (heartRate == null) ? "-" : hrLabel, 
                 Gfx.TEXT_JUSTIFY_LEFT
             );
-            dc.setColor(COLOR_LIGHTGREY, Gfx.COLOR_BLACK);
+            var color = isNightMode() ? COLOR_RED : hrTextColor;
+            dc.setColor(color, Gfx.COLOR_BLACK);
             
             // Distance
             dc.drawBitmap(
                 iconLeftPos, 
                 322,
-                distanceIcon
+                icon[:distance]
             );
             dc.drawText(
                 textLeftPos, 
@@ -348,7 +406,7 @@ class YumView extends Ui.WatchFace {
             dc.drawBitmap(
                 iconLeftPos, 
                 362,
-                floorsIcon
+                icon[:floors]
             );
             dc.drawText(
                 textLeftPos, 

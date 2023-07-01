@@ -12,16 +12,31 @@
     <bitmap id="battery_75" filename="battery_75.png" />
     <bitmap id="battery_85" filename="battery_85.png" />
     <bitmap id="battery_95" filename="battery_95.png" />
+    <bitmap id="battery_5_nightmode" filename="battery_5_nightmode.png" />
+    <bitmap id="battery_15_nightmode" filename="battery_15_nightmode.png" />
+    <bitmap id="battery_25_nightmode" filename="battery_25_nightmode.png" />
+    <bitmap id="battery_35_nightmode" filename="battery_35_nightmode.png" />
+    <bitmap id="battery_45_nightmode" filename="battery_45_nightmode.png" />
+    <bitmap id="battery_55_nightmode" filename="battery_55_nightmode.png" />
+    <bitmap id="battery_65_nightmode" filename="battery_65_nightmode.png" />
+    <bitmap id="battery_75_nightmode" filename="battery_75_nightmode.png" />
+    <bitmap id="battery_85_nightmode" filename="battery_85_nightmode.png" />
+    <bitmap id="battery_95_nightmode" filename="battery_95_nightmode.png" />
 
     <bitmap id="hr_low" filename="hr_low.png" />
     <bitmap id="hr_elevated" filename="hr_elevated.png" />
     <bitmap id="hr_high" filename="hr_high.png" />
     <bitmap id="hr_max" filename="hr_max.png" />
+    <bitmap id="hr_nightmode" filename="hr_nightmode.png" />
 
     <bitmap id="steps_incomplete" filename="steps_incomplete.png" />
     <bitmap id="steps_complete" filename="steps_complete.png" />
+    <bitmap id="steps_nightmode" filename="steps_nightmode.png" />
 
     <bitmap id="distance" filename="distance.png" />
+    <bitmap id="distance_nightmode" filename="distance_nightmode.png" />
     <bitmap id="floors" filename="floors.png" />
+    <bitmap id="floors_nightmode" filename="floors_nightmode.png" />
     <bitmap id="hourPattern" filename="hour_pattern.png" />
+    <bitmap id="hourPatternRed" filename="hour_pattern_red.png" />
 </drawables>
