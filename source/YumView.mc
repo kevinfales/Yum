@@ -385,7 +385,7 @@ class YumView extends Ui.WatchFace {
                 (heartRate == null) ? "-" : hrLabel, 
                 Gfx.TEXT_JUSTIFY_LEFT
             );
-            var color = isNightMode() ? COLOR_RED : hrTextColor;
+            var color = isNightMode() ? COLOR_RED : COLOR_LIGHTGREY;
             dc.setColor(color, Gfx.COLOR_BLACK);
             
             // Distance
