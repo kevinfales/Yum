@@ -150,6 +150,7 @@ class YumView extends Ui.WatchFace {
     function isNightMode() {
         // Night mode is between 11pm - 8am
         return (time.hour <= 7 || time.hour >= 23);
+        // return false;
     }
 
     function drawBattery(dc) {
