@@ -21,7 +21,7 @@
     <bitmap id="distance__base" filename="theme/base/distance.png" />
     <bitmap id="floors__base" filename="theme/base/floors.png" />
     <bitmap id="steps_incomplete__base" filename="theme/base/steps_incomplete.png" />
-    <bitmap id="steps_complete__base" filename="theme/base/steps_incomplete.png" />
+    <bitmap id="steps_complete__base" filename="theme/base/steps_complete.png" />
     <bitmap id="hourPattern__base" filename="theme/base/hour_pattern.png" />
 
     <!-- Teal theme [day] -->

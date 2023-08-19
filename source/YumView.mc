@@ -42,7 +42,7 @@ class YumView extends Ui.WatchFace {
     hidden var COLOR_TEAL = 0x00E39F;
     hidden var COLOR_LIGHTGREY = 0xD6D6D6;
     hidden var COLOR_DARKGREY = 0x232323;
-    hidden var COLOR_VERYDARKGREY = 0x0E0E0E;
+    hidden var COLOR_VERYDARKGREY = 0x151515;
     hidden var COLOR_YELLOW = 0xE0D785;
     hidden var COLOR_ORANGE = 0xE79356;
     hidden var COLOR_AMBER = 0xFF6C2E;
@@ -76,7 +76,6 @@ class YumView extends Ui.WatchFace {
         updateData();
         nightModeEnabled = isNightMode();
         activeTheme = loadTheme(nightModeEnabled ? themeChoices["night"] : themeChoices["day"]);
-        
     }
 
     function loadTheme(theme) {
@@ -242,6 +241,8 @@ class YumView extends Ui.WatchFace {
         heartRate = activityInfo.currentHeartRate;
         distance = (info.distance/(100000.0)).format("%.1f");
         floorsClimbed = info.floorsClimbed || 0;
+
+        nightModeEnabled = isNightMode();
     }
 
     function onUpdate(dc) {
