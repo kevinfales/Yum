@@ -12,6 +12,13 @@ using Toybox.Lang;
 
 class YumView extends Ui.WatchFace {
 
+    hidden var themeChoices = {
+        "day" => "teal",
+        "night" => "blue"   // "red", "blue"
+    };
+    hidden var activeTheme;
+    hidden var nightModeEnabled = false;
+
     hidden var inLowPower = false;
     hidden var time;
     hidden var hour = 0;
@@ -35,11 +42,13 @@ class YumView extends Ui.WatchFace {
     hidden var COLOR_TEAL = 0x00E39F;
     hidden var COLOR_LIGHTGREY = 0xD6D6D6;
     hidden var COLOR_DARKGREY = 0x232323;
+    hidden var COLOR_VERYDARKGREY = 0x0E0E0E;
     hidden var COLOR_YELLOW = 0xE0D785;
     hidden var COLOR_ORANGE = 0xE79356;
     hidden var COLOR_AMBER = 0xFF6C2E;
     hidden var COLOR_RED = 0xD80D00;
     hidden var COLOR_DARKRED = 0x770700;
+    hidden var COLOR_BLUE = 0x03009B;
 
     // Bitmaps
     hidden var hourPattern;
@@ -60,53 +69,158 @@ class YumView extends Ui.WatchFace {
 
     function initialize() {
         Ui.WatchFace.initialize();
+        mockup = App.loadResource(Rez.Drawables.mockup);
         FONT_RAJ_BIG = App.loadResource(Rez.Fonts.RAJ_BIG);
         FONT_RAJ_BIG_OUTLINE = App.loadResource(Rez.Fonts.RAJ_BIG_OUTLINE);
         FONT_RAJ_SMALL = App.loadResource(Rez.Fonts.RAJ_SMALL);
-        // mockup = App.loadResource(Rez.Drawables.mockup);
-        hourPattern = App.loadResource(Rez.Drawables.hourPattern);
-        hourPatternRed = App.loadResource(Rez.Drawables.hourPatternRed);
-        batteryIcon = [
-            App.loadResource(Rez.Drawables.battery_5),
-            App.loadResource(Rez.Drawables.battery_15),
-            App.loadResource(Rez.Drawables.battery_25),
-            App.loadResource(Rez.Drawables.battery_35),
-            App.loadResource(Rez.Drawables.battery_45),
-            App.loadResource(Rez.Drawables.battery_55),
-            App.loadResource(Rez.Drawables.battery_65),
-            App.loadResource(Rez.Drawables.battery_75),
-            App.loadResource(Rez.Drawables.battery_85),
-            App.loadResource(Rez.Drawables.battery_95)
-        ];
-        batteryIconNightmode = [
-            App.loadResource(Rez.Drawables.battery_5_nightmode),
-            App.loadResource(Rez.Drawables.battery_15_nightmode),
-            App.loadResource(Rez.Drawables.battery_25_nightmode),
-            App.loadResource(Rez.Drawables.battery_35_nightmode),
-            App.loadResource(Rez.Drawables.battery_45_nightmode),
-            App.loadResource(Rez.Drawables.battery_55_nightmode),
-            App.loadResource(Rez.Drawables.battery_65_nightmode),
-            App.loadResource(Rez.Drawables.battery_75_nightmode),
-            App.loadResource(Rez.Drawables.battery_85_nightmode),
-            App.loadResource(Rez.Drawables.battery_95_nightmode)
-        ];
-        hrIcon = [
-            App.loadResource(Rez.Drawables.hr_low),
-            App.loadResource(Rez.Drawables.hr_elevated),
-            App.loadResource(Rez.Drawables.hr_high),
-            App.loadResource(Rez.Drawables.hr_max),
-        ];
-        hrIconNightmode = App.loadResource(Rez.Drawables.hr_nightmode);
-        stepsIcon = [
-            App.loadResource(Rez.Drawables.steps_incomplete),
-            App.loadResource(Rez.Drawables.steps_complete),
-        ];
-        stepsIconNightmode = App.loadResource(Rez.Drawables.steps_nightmode);
-        distanceIcon = App.loadResource(Rez.Drawables.distance);
-        distanceIconNightmode = App.loadResource(Rez.Drawables.distance_nightmode);
-        floorsIcon = App.loadResource(Rez.Drawables.floors);
-        floorsIconNightmode = App.loadResource(Rez.Drawables.floors_nightmode);
         updateData();
+        nightModeEnabled = isNightMode();
+        activeTheme = loadTheme(nightModeEnabled ? themeChoices["night"] : themeChoices["day"]);
+        
+    }
+
+    function loadTheme(theme) {
+        var baseTheme = {
+            :textColorPrimary => COLOR_LIGHTGREY,
+            :textColorSecondary => COLOR_YELLOW, // JUST TO TEST THIS ACTUALLY OVERRIDES PROPERLY
+            :batteryIcon => [
+                App.loadResource(Rez.Drawables.battery_5__base),
+                App.loadResource(Rez.Drawables.battery_15__base),
+                App.loadResource(Rez.Drawables.battery_25__base),
+                App.loadResource(Rez.Drawables.battery_35__base),
+                App.loadResource(Rez.Drawables.battery_45__base),
+                App.loadResource(Rez.Drawables.battery_55__base),
+                App.loadResource(Rez.Drawables.battery_65__base),
+                App.loadResource(Rez.Drawables.battery_75__base),
+                App.loadResource(Rez.Drawables.battery_85__base),
+                App.loadResource(Rez.Drawables.battery_95__base)
+            ],
+            :hourPattern => App.loadResource(Rez.Drawables.hourPattern__base),
+            :hrIcon => [
+                App.loadResource(Rez.Drawables.hr_low__base),
+                App.loadResource(Rez.Drawables.hr_elevated__base),
+                App.loadResource(Rez.Drawables.hr_high__base),
+                App.loadResource(Rez.Drawables.hr_max__base),
+            ],
+            :hrLabelColor => [
+                COLOR_LIGHTGREY,
+                COLOR_YELLOW,
+                COLOR_ORANGE,
+                COLOR_AMBER
+            ],
+            :stepRingIncompleteColor => COLOR_LIGHTGREY,
+            :stepRingCompleteColor => COLOR_TEAL,
+            :stepRingBaseColor => COLOR_VERYDARKGREY,
+            :stepsIcon => [
+                App.loadResource(Rez.Drawables.steps_incomplete__base),
+                App.loadResource(Rez.Drawables.steps_complete__base),
+            ],
+            :distanceIcon => App.loadResource(Rez.Drawables.distance__base),
+            :floorsIcon => App.loadResource(Rez.Drawables.floors__base)
+        };
+
+        /* Theme defs */
+
+        var tealTheme = {
+            :textColorSecondary => COLOR_TEAL,
+            :hourPattern => App.loadResource(Rez.Drawables.hourPattern__teal),
+        };
+        var redTheme = {
+            :textColorPrimary => COLOR_RED,
+            :textColorSecondary => COLOR_RED,
+            :batteryIcon => [
+                App.loadResource(Rez.Drawables.battery_5__red),
+                App.loadResource(Rez.Drawables.battery_15__red),
+                App.loadResource(Rez.Drawables.battery_25__red),
+                App.loadResource(Rez.Drawables.battery_35__red),
+                App.loadResource(Rez.Drawables.battery_45__red),
+                App.loadResource(Rez.Drawables.battery_55__red),
+                App.loadResource(Rez.Drawables.battery_65__red),
+                App.loadResource(Rez.Drawables.battery_75__red),
+                App.loadResource(Rez.Drawables.battery_85__red),
+                App.loadResource(Rez.Drawables.battery_95__red)
+            ],
+            :hourPattern => App.loadResource(Rez.Drawables.hourPattern__red),
+            :hrIcon => [
+                App.loadResource(Rez.Drawables.hr__red),
+                App.loadResource(Rez.Drawables.hr__red),
+                App.loadResource(Rez.Drawables.hr__red),
+                App.loadResource(Rez.Drawables.hr__red),
+            ],
+            :hrLabelColor => [
+                COLOR_RED,
+                COLOR_RED,
+                COLOR_RED,
+                COLOR_RED
+            ],
+            :stepRingIncompleteColor => COLOR_DARKRED,
+            :stepRingCompleteColor => COLOR_RED,
+            :stepsIcon => [
+                App.loadResource(Rez.Drawables.steps__red),
+                App.loadResource(Rez.Drawables.steps__red),
+            ],
+            :distanceIcon => App.loadResource(Rez.Drawables.distance__red),
+            :floorsIcon => App.loadResource(Rez.Drawables.floors__red)
+        };
+        var blueTheme = {
+            :textColorPrimary => COLOR_BLUE,
+            :textColorSecondary => COLOR_BLUE,
+            :batteryIcon => [
+                App.loadResource(Rez.Drawables.battery_5__blue),
+                App.loadResource(Rez.Drawables.battery_15__blue),
+                App.loadResource(Rez.Drawables.battery_25__blue),
+                App.loadResource(Rez.Drawables.battery_35__blue),
+                App.loadResource(Rez.Drawables.battery_45__blue),
+                App.loadResource(Rez.Drawables.battery_55__blue),
+                App.loadResource(Rez.Drawables.battery_65__blue),
+                App.loadResource(Rez.Drawables.battery_75__blue),
+                App.loadResource(Rez.Drawables.battery_85__blue),
+                App.loadResource(Rez.Drawables.battery_95__blue)
+            ],
+            :hourPattern => App.loadResource(Rez.Drawables.hourPattern__blue),
+            :hrIcon => [
+                App.loadResource(Rez.Drawables.hr__blue),
+                App.loadResource(Rez.Drawables.hr__blue),
+                App.loadResource(Rez.Drawables.hr__blue),
+                App.loadResource(Rez.Drawables.hr__blue),
+            ],
+            :hrLabelColor => [
+                COLOR_BLUE,
+                COLOR_BLUE,
+                COLOR_BLUE,
+                COLOR_BLUE
+            ],
+            :stepRingIncompleteColor => COLOR_BLUE,
+            :stepRingCompleteColor => COLOR_BLUE,
+            :stepsIcon => [
+                App.loadResource(Rez.Drawables.steps__blue),
+                App.loadResource(Rez.Drawables.steps__blue),
+            ],
+            :distanceIcon => App.loadResource(Rez.Drawables.distance__blue),
+            :floorsIcon => App.loadResource(Rez.Drawables.floors__blue)
+        };
+
+        var themeMap = {
+            "teal" => tealTheme,
+            "red" => redTheme,
+            "blue" => blueTheme
+        };
+
+        // Monkey C has no way to combine/override dictionaries, like the spread operator in JS.
+        // Garmin, Monkey C is a disaster :'(
+
+        // Build a completely new object one key at a time I guess
+
+        // Start with just the base theme
+        var theTheme = baseTheme;
+
+        // List the themed keys
+        var themeKeys = themeMap[theme].keys();
+        // For each key in the theme dict, overwrite it
+        for(var i = 0; i < themeKeys.size(); i++) {
+            theTheme[themeKeys[i]] = themeMap[theme][themeKeys[i]];
+        }
+        return theTheme;
     }
 
     function updateData() {
@@ -132,8 +246,7 @@ class YumView extends Ui.WatchFace {
 
     function onUpdate(dc) {
         updateData();
-        var color = isNightMode() ? COLOR_RED : COLOR_LIGHTGREY;
-        dc.setColor(color, Gfx.COLOR_BLACK);
+        dc.setColor(activeTheme[:textColorPrimary], Gfx.COLOR_BLACK);
         dc.clear();
 
         drawBattery(dc);
@@ -148,8 +261,24 @@ class YumView extends Ui.WatchFace {
     }
 
     function isNightMode() {
-        // Night mode is between 11pm - 8am
-        return (time.hour <= 7 || time.hour >= 23);
+        var isNight = (time.hour <= 7 || time.hour >= 23); // Night mode is between 11pm - 8am
+        if(isNight) {
+            // If it just switched to night mode, load the night theme
+            if(!nightModeEnabled) {
+                activeTheme = loadTheme(themeChoices["night"]);
+            }
+            nightModeEnabled = true; // update class var state
+        }
+        else {
+            // If it just switched to day mode, load the day theme
+            if(nightModeEnabled) {
+                activeTheme = loadTheme(themeChoices["day"]);
+            }
+            nightModeEnabled = false; // update class var state
+        }
+        return isNight;
+        
+        // return (time.hour <= 7 || time.hour >= 23);
         // return false;
     }
 
@@ -187,7 +316,7 @@ class YumView extends Ui.WatchFace {
                 batteryIconIndex = 0;
             }
             
-            var icon = isNightMode() ? batteryIconNightmode : batteryIcon;
+            var icon = activeTheme[:batteryIcon];
             dc.drawBitmap(
                 (dc.getWidth() / 2)-42, 
                 28,
@@ -222,7 +351,7 @@ class YumView extends Ui.WatchFace {
         var hourPosX = (dc.getWidth() / 2) - (timeWidthInPx / 2);
         var secondsPosX = (dc.getWidth() / 2) + (timeWidthInPx / 2) + 4;
         
-        var pattern = isNightMode() ? hourPatternRed : hourPattern;
+        var pattern = activeTheme[:hourPattern];
 
         // Hour
         
@@ -244,8 +373,8 @@ class YumView extends Ui.WatchFace {
         
 
         // Minute
-        var font = isNightMode() ? FONT_RAJ_BIG_OUTLINE : FONT_RAJ_BIG;
-        var color = isNightMode() ? COLOR_RED : COLOR_TEAL;
+        var font = FONT_RAJ_BIG;
+        var color = activeTheme[:textColorSecondary];
         dc.setColor(color, Gfx.COLOR_BLACK);
 
         dc.drawText(
@@ -255,8 +384,7 @@ class YumView extends Ui.WatchFace {
             time.min.format("%02d"), 
             Gfx.TEXT_JUSTIFY_LEFT
         );
-        color = isNightMode() ? COLOR_RED : COLOR_LIGHTGREY;
-        dc.setColor(color, Gfx.COLOR_BLACK);
+        dc.setColor(activeTheme[:textColorPrimary], Gfx.COLOR_BLACK);
 
         // Second
         if(!inLowPower) {
@@ -287,14 +415,11 @@ class YumView extends Ui.WatchFace {
         /** Steps ring **/
         if(!inLowPower) {
             var icon;
-            if(isNightMode()) {
-                icon = stepsIconNightmode;
-            }
-            else if(steps >= stepGoal) {
-                icon = stepsIcon[1];
+            if(steps >= stepGoal) {
+                icon = activeTheme[:stepsIcon][1];
             }
             else {
-                icon = stepsIcon[0];
+                icon = activeTheme[:stepsIcon][0];
             }
             // Steps
             dc.drawBitmap(
@@ -311,7 +436,7 @@ class YumView extends Ui.WatchFace {
             );
 
             // Ring
-            var ringColor = COLOR_LIGHTGREY;
+            var ringColor = activeTheme[:stepRingBaseColor];
             var ringRadius = 52;
             var ringX = 152;
             var ringY = 340;
@@ -323,25 +448,25 @@ class YumView extends Ui.WatchFace {
             }
 
             dc.setPenWidth(6);
-            dc.setColor(COLOR_DARKGREY, Gfx.COLOR_BLACK);
+            dc.setColor(activeTheme[:stepRingBaseColor], Gfx.COLOR_BLACK);
             dc.drawArc(ringX, ringY, ringRadius, Gfx.ARC_CLOCKWISE , 0, 360);
             if(steps > 0) {
                 var x = ringX + ringRadius * Math.cos(Math.toRadians(-angle));
                 var y = ringY + ringRadius * Math.sin(Math.toRadians(-angle));
                 if(steps > stepGoal) {
-                    ringColor = isNightMode() ? COLOR_RED : COLOR_TEAL;
+                    ringColor = activeTheme[:stepRingCompleteColor];
                     dc.setColor(ringColor, Gfx.COLOR_BLACK);
                     dc.drawArc(ringX, ringY, ringRadius, Gfx.ARC_CLOCKWISE , 0, 360);
                 }
                 else {
-                    ringColor = isNightMode() ? COLOR_DARKRED : COLOR_LIGHTGREY;
+                    ringColor = activeTheme[:stepRingIncompleteColor];
                     dc.setColor(ringColor, Gfx.COLOR_BLACK);
                     dc.fillCircle(ringX, ringY-ringRadius, 3);
                     dc.drawArc(ringX, ringY, ringRadius, Gfx.ARC_CLOCKWISE, top, angle);
                     dc.fillCircle(x, y, 3);
                 }
             }
-            dc.setColor(COLOR_LIGHTGREY, Gfx.COLOR_BLACK);
+            dc.setColor(activeTheme[:textColorPrimary], Gfx.COLOR_BLACK);
         }
     }
 
@@ -350,29 +475,31 @@ class YumView extends Ui.WatchFace {
         if(!inLowPower) {
             var iconLeftPos = 221;
             var textLeftPos = iconLeftPos + 42;
-            var hrTextColor = COLOR_LIGHTGREY;
+            var hrTextColor;
             var icon = {
-                :hr => isNightMode() ? hrIconNightmode : hrIcon[0],
-                :distance => isNightMode() ? distanceIconNightmode : distanceIcon,
-                :floors => isNightMode() ? floorsIconNightmode : floorsIcon
+                :hr => activeTheme[:hrIcon],
+                :distance => activeTheme[:distanceIcon],
+                :floors => activeTheme[:floorsIcon]
             };
             // Heart rate
             var hrLabel = heartRate == null ? 0 : heartRate;
-            if(!isNightMode()) {
-                if(hrLabel > 140) {
-                    icon[:hr] = hrIcon[3];
-                    hrTextColor = COLOR_AMBER;
-                }
-                else if(hrLabel > 110) {
-                    icon[:hr] = hrIcon[2];
-                    hrTextColor = COLOR_ORANGE;
-                }
-                else if(hrLabel > 85) {
-                    icon[:hr] = hrIcon[1];
-                    hrTextColor = COLOR_YELLOW;
-                }
+            if(hrLabel > 140) {
+                icon[:hr] = activeTheme[:hrIcon][3];
+                hrTextColor = activeTheme[:hrLabelColor][3];
             }
-            hrTextColor = isNightMode() ? COLOR_RED : hrTextColor;
+            else if(hrLabel > 110) {
+                icon[:hr] = activeTheme[:hrIcon][2];
+                hrTextColor = activeTheme[:hrLabelColor][2];
+            }
+            else if(hrLabel > 85) {
+                icon[:hr] = activeTheme[:hrIcon][1];
+                hrTextColor = activeTheme[:hrLabelColor][1];
+            }
+            else {
+                icon[:hr] = activeTheme[:hrIcon][0];
+                hrTextColor = activeTheme[:hrLabelColor][0];
+            }
+
             dc.setColor(hrTextColor, Gfx.COLOR_BLACK);
             dc.drawBitmap(
                 iconLeftPos, 
@@ -386,8 +513,7 @@ class YumView extends Ui.WatchFace {
                 (heartRate == null) ? "-" : hrLabel, 
                 Gfx.TEXT_JUSTIFY_LEFT
             );
-            var color = isNightMode() ? COLOR_RED : COLOR_LIGHTGREY;
-            dc.setColor(color, Gfx.COLOR_BLACK);
+            dc.setColor(activeTheme[:textColorPrimary], Gfx.COLOR_BLACK);
             
             // Distance
             dc.drawBitmap(

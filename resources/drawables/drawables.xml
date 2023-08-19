@@ -1,42 +1,70 @@
 <drawables>
     <bitmap id="LauncherIcon" filename="launcher_icon.png" />
-    <bitmap id="mockup" filename="mockup 15.png" />
+    <bitmap id="mockup" filename="mockup 16.png" />
 
-    <bitmap id="battery_5" filename="battery_5.png" />
-    <bitmap id="battery_15" filename="battery_15.png" />
-    <bitmap id="battery_25" filename="battery_25.png" />
-    <bitmap id="battery_35" filename="battery_35.png" />
-    <bitmap id="battery_45" filename="battery_45.png" />
-    <bitmap id="battery_55" filename="battery_55.png" />
-    <bitmap id="battery_65" filename="battery_65.png" />
-    <bitmap id="battery_75" filename="battery_75.png" />
-    <bitmap id="battery_85" filename="battery_85.png" />
-    <bitmap id="battery_95" filename="battery_95.png" />
-    <bitmap id="battery_5_nightmode" filename="battery_5_nightmode.png" />
-    <bitmap id="battery_15_nightmode" filename="battery_15_nightmode.png" />
-    <bitmap id="battery_25_nightmode" filename="battery_25_nightmode.png" />
-    <bitmap id="battery_35_nightmode" filename="battery_35_nightmode.png" />
-    <bitmap id="battery_45_nightmode" filename="battery_45_nightmode.png" />
-    <bitmap id="battery_55_nightmode" filename="battery_55_nightmode.png" />
-    <bitmap id="battery_65_nightmode" filename="battery_65_nightmode.png" />
-    <bitmap id="battery_75_nightmode" filename="battery_75_nightmode.png" />
-    <bitmap id="battery_85_nightmode" filename="battery_85_nightmode.png" />
-    <bitmap id="battery_95_nightmode" filename="battery_95_nightmode.png" />
+    <!-- Base theme -->
 
-    <bitmap id="hr_low" filename="hr_low.png" />
-    <bitmap id="hr_elevated" filename="hr_elevated.png" />
-    <bitmap id="hr_high" filename="hr_high.png" />
-    <bitmap id="hr_max" filename="hr_max.png" />
-    <bitmap id="hr_nightmode" filename="hr_nightmode.png" />
+    <bitmap id="battery_5__base" filename="theme/base/battery_5.png" />
+    <bitmap id="battery_15__base" filename="theme/base/battery_15.png" />
+    <bitmap id="battery_25__base" filename="theme/base/battery_25.png" />
+    <bitmap id="battery_35__base" filename="theme/base/battery_35.png" />
+    <bitmap id="battery_45__base" filename="theme/base/battery_45.png" />
+    <bitmap id="battery_55__base" filename="theme/base/battery_55.png" />
+    <bitmap id="battery_65__base" filename="theme/base/battery_65.png" />
+    <bitmap id="battery_75__base" filename="theme/base/battery_75.png" />
+    <bitmap id="battery_85__base" filename="theme/base/battery_85.png" />
+    <bitmap id="battery_95__base" filename="theme/base/battery_95.png" />
+    <bitmap id="hr_low__base" filename="theme/base/hr_low.png" />
+    <bitmap id="hr_elevated__base" filename="theme/base/hr_elevated.png" />
+    <bitmap id="hr_high__base" filename="theme/base/hr_high.png" />
+    <bitmap id="hr_max__base" filename="theme/base/hr_max.png" />
+    <bitmap id="distance__base" filename="theme/base/distance.png" />
+    <bitmap id="floors__base" filename="theme/base/floors.png" />
+    <bitmap id="steps_incomplete__base" filename="theme/base/steps_incomplete.png" />
+    <bitmap id="steps_complete__base" filename="theme/base/steps_incomplete.png" />
+    <bitmap id="hourPattern__base" filename="theme/base/hour_pattern.png" />
 
-    <bitmap id="steps_incomplete" filename="steps_incomplete.png" />
-    <bitmap id="steps_complete" filename="steps_complete.png" />
-    <bitmap id="steps_nightmode" filename="steps_nightmode.png" />
+    <!-- Teal theme [day] -->
 
-    <bitmap id="distance" filename="distance.png" />
-    <bitmap id="distance_nightmode" filename="distance_nightmode.png" />
-    <bitmap id="floors" filename="floors.png" />
-    <bitmap id="floors_nightmode" filename="floors_nightmode.png" />
-    <bitmap id="hourPattern" filename="hour_pattern.png" />
-    <bitmap id="hourPatternRed" filename="hour_pattern_red.png" />
+    <bitmap id="steps_complete__teal" filename="theme/teal/steps_complete.png" />
+    <bitmap id="hourPattern__teal" filename="theme/teal/hour_pattern.png" />
+    
+
+    <!-- Red theme [night] -->
+
+    <bitmap id="battery_5__red" filename="theme/red/battery_5.png" />
+    <bitmap id="battery_15__red" filename="theme/red/battery_15.png" />
+    <bitmap id="battery_25__red" filename="theme/red/battery_25.png" />
+    <bitmap id="battery_35__red" filename="theme/red/battery_35.png" />
+    <bitmap id="battery_45__red" filename="theme/red/battery_45.png" />
+    <bitmap id="battery_55__red" filename="theme/red/battery_55.png" />
+    <bitmap id="battery_65__red" filename="theme/red/battery_65.png" />
+    <bitmap id="battery_75__red" filename="theme/red/battery_75.png" />
+    <bitmap id="battery_85__red" filename="theme/red/battery_85.png" />
+    <bitmap id="battery_95__red" filename="theme/red/battery_95.png" />
+    <bitmap id="hr__red" filename="theme/red/hr.png" />
+    <bitmap id="steps__red" filename="theme/red/steps.png" />
+    <bitmap id="distance__red" filename="theme/red/distance.png" />
+    <bitmap id="floors__red" filename="theme/red/floors.png" />
+    <bitmap id="hourPattern__red" filename="theme/red/hour_pattern.png" />
+
+
+    <!-- Blue theme [night] -->
+
+    <bitmap id="battery_5__blue" filename="theme/blue/battery_5.png" />
+    <bitmap id="battery_15__blue" filename="theme/blue/battery_15.png" />
+    <bitmap id="battery_25__blue" filename="theme/blue/battery_25.png" />
+    <bitmap id="battery_35__blue" filename="theme/blue/battery_35.png" />
+    <bitmap id="battery_45__blue" filename="theme/blue/battery_45.png" />
+    <bitmap id="battery_55__blue" filename="theme/blue/battery_55.png" />
+    <bitmap id="battery_65__blue" filename="theme/blue/battery_65.png" />
+    <bitmap id="battery_75__blue" filename="theme/blue/battery_75.png" />
+    <bitmap id="battery_85__blue" filename="theme/blue/battery_85.png" />
+    <bitmap id="battery_95__blue" filename="theme/blue/battery_95.png" />
+    <bitmap id="hr__blue" filename="theme/blue/hr.png" />
+    <bitmap id="steps__blue" filename="theme/blue/steps.png" />
+    <bitmap id="distance__blue" filename="theme/blue/distance.png" />
+    <bitmap id="floors__blue" filename="theme/blue/floors.png" />
+    <bitmap id="hourPattern__blue" filename="theme/blue/hour_pattern.png" />
+
 </drawables>
