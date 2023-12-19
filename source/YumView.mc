@@ -123,6 +123,7 @@ class YumView extends Ui.WatchFace {
         var tealTheme = {
             :textColorSecondary => COLOR_TEAL,
             :hourPattern => App.loadResource(Rez.Drawables.hourPattern__teal),
+            :showHourPattern => true,
         };
         var redTheme = {
             :textColorPrimary => COLOR_RED,
@@ -140,6 +141,7 @@ class YumView extends Ui.WatchFace {
                 App.loadResource(Rez.Drawables.battery_95__red)
             ],
             :hourPattern => App.loadResource(Rez.Drawables.hourPattern__red),
+            :showHourPattern => false,
             :hrIcon => [
                 App.loadResource(Rez.Drawables.hr__red),
                 App.loadResource(Rez.Drawables.hr__red),
@@ -177,6 +179,7 @@ class YumView extends Ui.WatchFace {
                 App.loadResource(Rez.Drawables.battery_95__blue)
             ],
             :hourPattern => App.loadResource(Rez.Drawables.hourPattern__blue),
+            :showHourPattern => false,
             :hrIcon => [
                 App.loadResource(Rez.Drawables.hr__blue),
                 App.loadResource(Rez.Drawables.hr__blue),
@@ -353,16 +356,22 @@ class YumView extends Ui.WatchFace {
         var secondsPosX = (dc.getWidth() / 2) + (timeWidthInPx / 2) + 4;
         
         var pattern = activeTheme[:hourPattern];
+        var showPattern = activeTheme[:showHourPattern];
+
+        var font = FONT_RAJ_BIG;
 
         // Hour
-        
-        dc.drawBitmap(
-            hourPosX, 
-            136,
-            pattern
-        );
-        
-        dc.setColor(Gfx.COLOR_TRANSPARENT, Gfx.COLOR_BLACK);
+        if(showPattern == true) {
+            dc.drawBitmap(
+                hourPosX, 
+                136,
+                pattern
+            );
+            dc.setColor(Gfx.COLOR_TRANSPARENT, Gfx.COLOR_BLACK);
+        }
+        else {
+            dc.setColor(activeTheme[:textColorSecondary], Gfx.COLOR_BLACK);
+        }
 
         dc.drawText(
             hourPosX,
@@ -374,9 +383,7 @@ class YumView extends Ui.WatchFace {
         
 
         // Minute
-        var font = FONT_RAJ_BIG;
-        var color = activeTheme[:textColorSecondary];
-        dc.setColor(color, Gfx.COLOR_BLACK);
+        dc.setColor(activeTheme[:textColorSecondary], Gfx.COLOR_BLACK);
 
         dc.drawText(
             hourPosX + hourWidthInPx,
