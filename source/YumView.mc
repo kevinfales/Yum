@@ -48,7 +48,7 @@ class YumView extends Ui.WatchFace {
     hidden var COLOR_AMBER = 0xFF6C2E;
     hidden var COLOR_RED = 0xD80D00;
     hidden var COLOR_DARKRED = 0x770700;
-    hidden var COLOR_BLUE = 0x03009B;
+    hidden var COLOR_BLUE = 0x0400C6;
 
     // Bitmaps
     hidden var hourPattern;
