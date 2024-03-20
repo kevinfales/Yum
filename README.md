@@ -10,7 +10,7 @@ Yum is currently only supported for *Garmin Venu 2 Plus*.
 # How to install
 
 1. (Mac users only) Download and install [Android File Transfer](https://www.android.com/filetransfer/)
-2. Download the ![Yum watch face binary](https://github.com/kevinfales/Yum/blob/master/bin/Yum.prg)
+2. Download the [Yum watch face binary](https://github.com/kevinfales/Yum/blob/master/bin/Yum.prg)
 3. Connect your watch to your computer via USB
 4. Browse to the `GARMIN/APPS` folder on your device
 5. Copy `Yum.prg` into the `GARMIN/APPS` folder.
