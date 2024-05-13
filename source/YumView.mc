@@ -265,7 +265,7 @@ class YumView extends Ui.WatchFace {
     }
 
     function isNightMode() {
-        var isNight = (time.hour <= 7 || time.hour >= 23); // Night mode is between 11pm - 8am
+        var isNight = (time.hour <= 5 || time.hour >= 23); // Night mode is between 11pm - 6am
         if(isNight) {
             // If it just switched to night mode, load the night theme
             if(!nightModeEnabled) {
