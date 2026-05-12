@@ -12,12 +12,17 @@ using Toybox.Lang;
 
 class YumView extends Ui.WatchFace {
 
-    hidden var themeChoices = {
+    hidden var themeChoices as Lang.Dictionary = {
         "day" => "teal",
         "night" => "blue"   // "red", "blue"
     };
-    hidden var activeTheme;
+    hidden var activeTheme as Lang.Dictionary = {};
     hidden var nightModeEnabled = false;
+
+    // Layout was designed for the Venu 2 Plus (416x416). Other supported devices
+    // (e.g. Venu 4, 454x454) scale all hardcoded positions from this baseline.
+    hidden var BASE_RES = 416.0;
+    hidden var scale = 1.0;
 
     hidden var inLowPower = false;
     hidden var time;
@@ -78,7 +83,7 @@ class YumView extends Ui.WatchFace {
         activeTheme = loadTheme(nightModeEnabled ? themeChoices["night"] : themeChoices["day"]);
     }
 
-    function loadTheme(theme) {
+    function loadTheme(theme as Lang.String) as Lang.Dictionary {
         var baseTheme = {
             :textColorPrimary => COLOR_LIGHTGREY,
             :textColorSecondary => COLOR_YELLOW, // JUST TO TEST THIS ACTUALLY OVERRIDES PROPERLY
@@ -217,10 +222,11 @@ class YumView extends Ui.WatchFace {
         var theTheme = baseTheme;
 
         // List the themed keys
-        var themeKeys = themeMap[theme].keys();
+        var themeOverrides = themeMap[theme] as Lang.Dictionary;
+        var themeKeys = themeOverrides.keys();
         // For each key in the theme dict, overwrite it
         for(var i = 0; i < themeKeys.size(); i++) {
-            theTheme[themeKeys[i]] = themeMap[theme][themeKeys[i]];
+            theTheme[themeKeys[i]] = themeOverrides[themeKeys[i]];
         }
         return theTheme;
     }
@@ -243,13 +249,18 @@ class YumView extends Ui.WatchFace {
         batteryRemaining = Math.floor(System.getSystemStats().battery);
         heartRate = activityInfo.currentHeartRate;
         distance = (info.distance/(100000.0)).format("%.1f");
-        floorsClimbed = info.floorsClimbed || 0;
+        floorsClimbed = (info.floorsClimbed != null) ? info.floorsClimbed : 0;
 
         nightModeEnabled = isNightMode();
     }
 
+    function s(v) {
+        return (v * scale).toNumber();
+    }
+
     function onUpdate(dc) {
         updateData();
+        scale = dc.getWidth() / BASE_RES;
         dc.setColor(activeTheme[:textColorPrimary], Gfx.COLOR_BLACK);
         dc.clear();
 
@@ -322,15 +333,15 @@ class YumView extends Ui.WatchFace {
             
             var icon = activeTheme[:batteryIcon];
             dc.drawBitmap(
-                (dc.getWidth() / 2)-42, 
-                28,
+                (dc.getWidth() / 2) - s(42),
+                s(28),
                 icon[batteryIconIndex]
             );
             dc.drawText(
-                dc.getWidth() / 2, 
-                27, 
-                FONT_RAJ_SMALL, 
-                batteryRemaining.format("%d").toString() + "%", 
+                dc.getWidth() / 2,
+                s(27),
+                FONT_RAJ_SMALL,
+                batteryRemaining.format("%d").toString() + "%",
                 Gfx.TEXT_JUSTIFY_LEFT
             );
         }
@@ -353,7 +364,7 @@ class YumView extends Ui.WatchFace {
         var minWidthInPx = dc.getTextWidthInPixels(time.min.format("%02d"), FONT_RAJ_BIG);
         var timeWidthInPx = hourWidthInPx + minWidthInPx;
         var hourPosX = (dc.getWidth() / 2) - (timeWidthInPx / 2);
-        var secondsPosX = (dc.getWidth() / 2) + (timeWidthInPx / 2) + 4;
+        var secondsPosX = (dc.getWidth() / 2) + (timeWidthInPx / 2) + s(4);
         
         var pattern = activeTheme[:hourPattern];
         var showPattern = activeTheme[:showHourPattern];
@@ -363,8 +374,8 @@ class YumView extends Ui.WatchFace {
         // Hour
         if(showPattern == true) {
             dc.drawBitmap(
-                hourPosX, 
-                136,
+                hourPosX,
+                s(136),
                 pattern
             );
             dc.setColor(Gfx.COLOR_TRANSPARENT, Gfx.COLOR_BLACK);
@@ -375,21 +386,21 @@ class YumView extends Ui.WatchFace {
 
         dc.drawText(
             hourPosX,
-            109,
-            FONT_RAJ_BIG, 
-            hour, 
+            s(109),
+            FONT_RAJ_BIG,
+            hour,
             Gfx.TEXT_JUSTIFY_LEFT
         );
-        
+
 
         // Minute
         dc.setColor(activeTheme[:textColorSecondary], Gfx.COLOR_BLACK);
 
         dc.drawText(
             hourPosX + hourWidthInPx,
-            109, 
-            font, 
-            time.min.format("%02d"), 
+            s(109),
+            font,
+            time.min.format("%02d"),
             Gfx.TEXT_JUSTIFY_LEFT
         );
         dc.setColor(activeTheme[:textColorPrimary], Gfx.COLOR_BLACK);
@@ -398,9 +409,9 @@ class YumView extends Ui.WatchFace {
         if(!inLowPower) {
             dc.drawText(
                 secondsPosX,
-                187, 
-                FONT_RAJ_SMALL, 
-                time.sec.format("%02d"), 
+                s(187),
+                FONT_RAJ_SMALL,
+                time.sec.format("%02d"),
                 Gfx.TEXT_JUSTIFY_LEFT
             );
         }
@@ -411,9 +422,9 @@ class YumView extends Ui.WatchFace {
         if(!inLowPower) {
             dc.drawText(
                 dc.getWidth() / 2,
-                98, 
-                FONT_RAJ_SMALL, 
-                dateString.toUpper(), 
+                s(98),
+                FONT_RAJ_SMALL,
+                dateString.toUpper(),
                 Gfx.TEXT_JUSTIFY_CENTER
             );
         }
@@ -431,23 +442,23 @@ class YumView extends Ui.WatchFace {
             }
             // Steps
             dc.drawBitmap(
-                134, 
-                303,
+                s(134),
+                s(303),
                 icon
             );
             dc.drawText(
-                153, 
-                339,
-                FONT_RAJ_SMALL, 
-                steps, 
+                s(153),
+                s(339),
+                FONT_RAJ_SMALL,
+                steps,
                 Gfx.TEXT_JUSTIFY_CENTER
             );
 
             // Ring
             var ringColor = activeTheme[:stepRingBaseColor];
-            var ringRadius = 52;
-            var ringX = 152;
-            var ringY = 340;
+            var ringRadius = s(52);
+            var ringX = s(152);
+            var ringY = s(340);
             var top = 90;
             var stepPercent = (steps.toFloat() / stepGoal.toFloat()) as Lang.Float;
             var angle = top+(360-(stepPercent*360));
@@ -455,7 +466,7 @@ class YumView extends Ui.WatchFace {
                 angle -= 360;
             }
 
-            dc.setPenWidth(6);
+            dc.setPenWidth(s(6));
             dc.setColor(activeTheme[:stepRingBaseColor], Gfx.COLOR_BLACK);
             dc.drawArc(ringX, ringY, ringRadius, Gfx.ARC_CLOCKWISE , 0, 360);
             if(steps > 0) {
@@ -469,9 +480,9 @@ class YumView extends Ui.WatchFace {
                 else {
                     ringColor = activeTheme[:stepRingIncompleteColor];
                     dc.setColor(ringColor, Gfx.COLOR_BLACK);
-                    dc.fillCircle(ringX, ringY-ringRadius, 3);
+                    dc.fillCircle(ringX, ringY-ringRadius, s(3));
                     dc.drawArc(ringX, ringY, ringRadius, Gfx.ARC_CLOCKWISE, top, angle);
-                    dc.fillCircle(x, y, 3);
+                    dc.fillCircle(x, y, s(3));
                 }
             }
             dc.setColor(activeTheme[:textColorPrimary], Gfx.COLOR_BLACK);
@@ -481,8 +492,8 @@ class YumView extends Ui.WatchFace {
     function drawStats(dc) {
         /** Stats **/
         if(!inLowPower) {
-            var iconLeftPos = 221;
-            var textLeftPos = iconLeftPos + 42;
+            var iconLeftPos = s(221);
+            var textLeftPos = iconLeftPos + s(42);
             var hrTextColor;
             var icon = {
                 :hr => activeTheme[:hrIcon],
@@ -510,44 +521,44 @@ class YumView extends Ui.WatchFace {
 
             dc.setColor(hrTextColor, Gfx.COLOR_BLACK);
             dc.drawBitmap(
-                iconLeftPos, 
-                282,
+                iconLeftPos,
+                s(282),
                 icon[:hr]
             );
             dc.drawText(
-                textLeftPos, 
-                279, 
-                FONT_RAJ_SMALL, 
-                (heartRate == null) ? "-" : hrLabel, 
+                textLeftPos,
+                s(279),
+                FONT_RAJ_SMALL,
+                (heartRate == null) ? "-" : hrLabel,
                 Gfx.TEXT_JUSTIFY_LEFT
             );
             dc.setColor(activeTheme[:textColorPrimary], Gfx.COLOR_BLACK);
-            
+
             // Distance
             dc.drawBitmap(
-                iconLeftPos, 
-                322,
+                iconLeftPos,
+                s(322),
                 icon[:distance]
             );
             dc.drawText(
-                textLeftPos, 
-                319, 
-                FONT_RAJ_SMALL, 
-                distance+"km", 
+                textLeftPos,
+                s(319),
+                FONT_RAJ_SMALL,
+                distance+"km",
                 Gfx.TEXT_JUSTIFY_LEFT
             );
 
             // Floors
             dc.drawBitmap(
-                iconLeftPos, 
-                362,
+                iconLeftPos,
+                s(362),
                 icon[:floors]
             );
             dc.drawText(
-                textLeftPos, 
-                359, 
-                FONT_RAJ_SMALL, 
-                floorsClimbed, 
+                textLeftPos,
+                s(359),
+                FONT_RAJ_SMALL,
+                floorsClimbed,
                 Gfx.TEXT_JUSTIFY_LEFT
             );
         }
