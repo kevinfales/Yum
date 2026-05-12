@@ -5,7 +5,7 @@
 
 # Supported Devices
 
-Yum is currently only supported for *Garmin Venu 2 Plus*.
+Yum is currently only supported for *Garmin Venu 2 Plus* and *Garmin Venu 4*.
 
 # How to install
 
